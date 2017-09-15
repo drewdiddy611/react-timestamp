@@ -37,9 +37,6 @@ function plural(string, count, many) {
 class Timestamp extends React.Component {
 	constructor(props) {
 		super(props);
-		if (props.uncontrolled) {
-			this.currentTime = props.time;
-		}
 	}
 
 	_distanceOfTimeInWords(date, compare_to) {
@@ -260,9 +257,7 @@ class Timestamp extends React.Component {
 	}
 
 	setTime(time) {
-		if (this.props.uncontrolled) {
-			this.sliderValue.innerText = this._formatDate(time);
-		}
+		this.timestampElement.innerText = this._formatDate(time);
 	}
 
 	render() {
@@ -271,15 +266,15 @@ class Timestamp extends React.Component {
 			style: this.props.style
 		};
 		if (this.props.uncontrolled) {
-			props.ref = input => (this.sliderValue = input);
+			props.ref = input => (this.timestampElement = input);
+		} else {
+			delete this.setTime;
 		}
 
 		return React.createElement(
 			this.props.component,
 			props,
-			this._formatDate(
-				this.props.uncontrolled ? this.currentTime : this.props.time
-			)
+			this._formatDate(this.props.time)
 		);
 	}
 }
